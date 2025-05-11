@@ -257,7 +257,6 @@
             100% { transform: translate(var(--x), var(--y)) scale(1); opacity: 0; }
         }
 
-        /* Scrollbar styling */
         ::-webkit-scrollbar {
             width: 12px;
         }
@@ -299,10 +298,8 @@
 <body>
     <div class="main-container">
         <div class="container">
-            <!-- Confetti and fireworks elements will be added here by JS -->
-            
             <div class="header-image-container">
-                <img id="headerImage" class="header-image" src="https://iili.io/3vG9pNp.md.jpg" alt="پاکستان جنگ بندی مبارک">
+                <img id="headerImage" class="header-image" src="pakistan.png" alt="پاکستان جنگ بندی مبارک">
             </div>
             
             <h1>پاکستان جنگ بندی مبارک</h1>
@@ -339,11 +336,9 @@
     </audio>
 
     <script>
-        // Set image from URL parameter
         const urlParams = new URLSearchParams(window.location.search);
         const sender = urlParams.get('sender');
         
-        // Check if this is a recipient view
         if (sender) {
             document.getElementById('senderName').textContent = decodeURIComponent(sender);
             document.getElementById('userName').value = decodeURIComponent(sender);
@@ -353,13 +348,11 @@
             document.querySelector('.share-instruction').style.display = 'none';
         }
 
-        // Update sender name in real-time
         function updateSenderName() {
             const userName = document.getElementById('userName').value.trim();
             document.getElementById('senderName').textContent = userName || 'آپ کا نام';
         }
 
-        // WhatsApp share function
         function shareOnWhatsApp(e) {
             e.preventDefault();
             const userName = document.getElementById('userName').value.trim();
@@ -369,49 +362,31 @@
                 return;
             }
             
-            // Update sender name
             document.getElementById('senderName').textContent = userName;
-            
-            // Generate shareable link with name
             const currentUrl = new URL(window.location.href);
             currentUrl.searchParams.set('sender', userName);
             const shareUrl = currentUrl.toString();
             
-            // Custom message as requested
             const message = `${userName} کی طرف سے پاکستان جنگ بندی مبارک ہو!\n\n"اللہ تعالیٰ پاکستان کو ہمیشہ سلامتی اور امن عطا فرمائے۔ ہم سب مل کر ملک کی حفاظت کریں گے۔ پاکستان پائندہ باد!"\n\nاس خصوصی پیغام کو دیکھنے کے لیے لنک پر کلک کریں:\n${shareUrl}`;
             
             const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
-            
-            // Celebrate
             bigCelebration();
         }
 
-        // Play fireworks sound and create confetti
         function celebrate() {
-            // Play sound
             const audio = document.getElementById('fireworksAudio');
             audio.volume = 0.2;
             audio.play().catch(e => console.log('آواز چلانے میں مسئلہ: ', e));
-            
-            // Create confetti
             createConfetti(30);
-            
-            // Create few fireworks
             createFireworks(5);
         }
         
-        // Big celebration with more effects
         function bigCelebration() {
-            // Play sound
             const audio = document.getElementById('fireworksAudio');
             audio.volume = 0.3;
             audio.play().catch(e => console.log('آواز چلانے میں مسئلہ: ', e));
-            
-            // Create lots of confetti
             createConfetti(100);
-            
-            // Create many fireworks
             createFireworks(15);
         }
         
@@ -428,7 +403,6 @@
                 confetti.style.height = confetti.style.width;
                 container.appendChild(confetti);
                 
-                // Remove confetti after animation
                 setTimeout(() => {
                     confetti.remove();
                 }, 5000);
@@ -444,7 +418,6 @@
                     const firework = document.createElement('div');
                     firework.className = 'firework';
                     
-                    // Random position in container
                     const x = (Math.random() - 0.5) * containerRect.width;
                     const y = (Math.random() - 0.5) * containerRect.height;
                     
@@ -454,7 +427,6 @@
                     
                     container.appendChild(firework);
                     
-                    // Remove firework after animation
                     setTimeout(() => {
                         firework.remove();
                     }, 1000);
@@ -462,10 +434,8 @@
             }
         }
 
-        // Initial celebration
         setTimeout(() => {
             celebrate();
-            // Create some random fireworks periodically
             setInterval(() => {
                 if (Math.random() > 0.7) {
                     createFireworks(3);
@@ -475,6 +445,7 @@
     </script>
 </body>
 </html>
+
 <script type="text/javascript">
 	atOptions = {
 		'key' : '1c984e0d05b70b660c8f5085d495b10f',
@@ -485,6 +456,7 @@
 	};
 </script>
 <script type="text/javascript" src="//www.highperformanceformat.com/1c984e0d05b70b660c8f5085d495b10f/invoke.js"></script>
+
 <script type="text/javascript">
 	atOptions = {
 		'key' : '1c984e0d05b70b660c8f5085d495b10f',
@@ -495,6 +467,7 @@
 	};
 </script>
 <script type="text/javascript" src="//www.highperformanceformat.com/1c984e0d05b70b660c8f5085d495b10f/invoke.js"></script>
+
 <script type="text/javascript">
 	atOptions = {
 		'key' : '1c984e0d05b70b660c8f5085d495b10f',
