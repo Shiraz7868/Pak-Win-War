@@ -296,10 +296,16 @@
     </style>
 </head>
 <body>
+    <!-- بیک گراؤنڈ میوزک -->
+    <audio id="bgMusic" autoplay loop>
+        <source src="Pakistan1.mp3" type="audio/mpeg">
+        آپ کا براؤزر آڈیو سپورٹ نہیں کرتا۔
+    </audio>
+
     <div class="main-container">
         <div class="container">
             <div class="header-image-container">
-                <img id="headerImage" class="header-image" src="pakistan.png" alt="پاکستان جنگ بندی مبارک">
+                <img class="header-image" src="https://iili.io/3vG9pNp.md.jpg" alt="پاکستان جنگ بندی مبارک">
             </div>
             
             <h1>پاکستان جنگ بندی مبارک</h1>
@@ -312,140 +318,101 @@
             <p>پاکستان پائندہ باد!</p>
             
             <div class="name-input">
-                <input type="text" id="userName" placeholder="اپنا نام درج کریں" oninput="updateSenderName()">
+                <input type="text" id="userName" placeholder="اپنا نام درج کریں" oninput="updateSender()">
                 <div class="share-instruction">نام درج کرنے کے بعد واٹس ایپ پر بھیجیں</div>
             </div>
             
             <p>بھیجیں: <span class="sender" id="senderName">آپ کا نام</span></p>
             
-            <a href="#" class="whatsapp-btn" id="whatsappShare" onclick="shareOnWhatsApp(event)">
+            <a href="#" class="whatsapp-btn" onclick="shareOnWhatsApp(event)">
                 واٹس ایپ پر بھیجیں
                 <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
             </a>
             
             <div class="footer">
-                <p id="recipientMessage" style="display:none;"><span id="friendName"></span> نے آپ کو پاکستان جنگ بندی مبارک باد دی ہے!</p>
+                <p id="recipientMsg" style="display:none;"><span id="friendName"></span> نے آپ کو پاکستان جنگ بندی مبارک باد دی ہے!</p>
                 <p>اس طرف سے بھیجا گیا ❤️</p>
                 <p>پاکستان زندہ باد!</p>
             </div>
         </div>
     </div>
 
-    <audio id="fireworksAudio" loop>
+    <!-- فائرورکس آواز -->
+    <audio id="fireworksSound">
         <source src="https://www.soundjay.com/misc/sounds/fireworks-01.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const sender = urlParams.get('sender');
-        
-        if (sender) {
-            document.getElementById('senderName').textContent = decodeURIComponent(sender);
-            document.getElementById('userName').value = decodeURIComponent(sender);
-            document.getElementById('friendName').textContent = decodeURIComponent(sender);
-            document.getElementById('recipientMessage').style.display = 'block';
+        // نام شیئرنگ سسٹم
+        const urlParams = new URLSearchParams(location.search);
+        const senderName = urlParams.get('sender');
+
+        if(senderName) {
+            document.getElementById('senderName').textContent = decodeURIComponent(senderName);
+            document.getElementById('friendName').textContent = decodeURIComponent(senderName);
+            document.getElementById('recipientMsg').style.display = 'block';
             document.getElementById('userName').style.display = 'none';
             document.querySelector('.share-instruction').style.display = 'none';
+        } else {
+            document.getElementById('userName').value = '';
         }
 
-        function updateSenderName() {
-            const userName = document.getElementById('userName').value.trim();
-            document.getElementById('senderName').textContent = userName || 'آپ کا نام';
+        function updateSender() {
+            const name = document.getElementById('userName').value.trim();
+            document.getElementById('senderName').textContent = name || 'آپ کا نام';
         }
 
+        // واٹس ایپ شیئرنگ
         function shareOnWhatsApp(e) {
             e.preventDefault();
             const userName = document.getElementById('userName').value.trim();
             
-            if (!userName) {
-                alert('براہ کرم اپنا نام درج کریں۔');
+            if(!userName) {
+                alert('براہ کرم نام درج کریں');
                 return;
             }
+
+            const baseURL = "https://pak-win-war.vercel.app/";
+            const shareURL = `${baseURL}?sender=${encodeURIComponent(userName)}`;
             
-            document.getElementById('senderName').textContent = userName;
-            const currentUrl = new URL(window.location.href);
-            currentUrl.searchParams.set('sender', userName);
-            const shareUrl = currentUrl.toString();
+            const message = `${userName} کی طرف سے پاکستان جنگ بندی مبارک ہو!\n\n"اللہ تعالیٰ پاکستان کو ہمیشہ سلامتی اور امن عطا فرمائے۔ ہم سب مل کر ملک کی حفاظت کریں گے۔ پاکستان پائندہ باد!"\n\nاس خصوصی پیغام کو دیکھنے کے لیے لنک پر کلک کریں:\n${shareURL}`;
             
-            const message = `${userName} کی طرف سے پاکستان جنگ بندی مبارک ہو!\n\n"اللہ تعالیٰ پاکستان کو ہمیشہ سلامتی اور امن عطا فرمائے۔ ہم سب مل کر ملک کی حفاظت کریں گے۔ پاکستان پائندہ باد!"\n\nاس خصوصی پیغام کو دیکھنے کے لیے لنک پر کلک کریں:\n${shareUrl}`;
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, '_blank');
             
-            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-            bigCelebration();
+            // جشن کا افعال
+            playFireworks();
+            createConfetti(100);
         }
 
-        function celebrate() {
-            const audio = document.getElementById('fireworksAudio');
-            audio.volume = 0.2;
-            audio.play().catch(e => console.log('آواز چلانے میں مسئلہ: ', e));
-            createConfetti(30);
-            createFireworks(5);
-        }
-        
-        function bigCelebration() {
-            const audio = document.getElementById('fireworksAudio');
+        // آواز اور اینیمیشنز
+        function playFireworks() {
+            const audio = document.getElementById('fireworksSound');
+            audio.currentTime = 0;
             audio.volume = 0.3;
-            audio.play().catch(e => console.log('آواز چلانے میں مسئلہ: ', e));
-            createConfetti(100);
-            createFireworks(15);
+            audio.play();
         }
-        
+
         function createConfetti(count) {
             const container = document.querySelector('.container');
-            for (let i = 0; i < count; i++) {
+            for(let i=0; i<count; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                confetti.style.animationDelay = Math.random() + 's';
-                confetti.style.width = (Math.random() * 10 + 5) + 'px';
-                confetti.style.height = confetti.style.width;
+                .style.left = Math.random()*100 + '%';
+                confetti.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 50%)`;
                 container.appendChild(confetti);
                 
-                setTimeout(() => {
-                    confetti.remove();
-                }, 5000);
-            }
-        }
-        
-        function createFireworks(count) {
-            const container = document.querySelector('.container');
-            const containerRect = container.getBoundingClientRect();
-            
-            for (let i = 0; i < count; i++) {
-                setTimeout(() => {
-                    const firework = document.createElement('div');
-                    firework.className = 'firework';
-                    
-                    const x = (Math.random() - 0.5) * containerRect.width;
-                    const y = (Math.random() - 0.5) * containerRect.height;
-                    
-                    firework.style.setProperty('--x', x + 'px');
-                    firework.style.setProperty('--y', y + 'px');
-                    firework.style.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                    
-                    container.appendChild(firework);
-                    
-                    setTimeout(() => {
-                        firework.remove();
-                    }, 1000);
-                }, i * 300);
+                setTimeout(() => confetti.remove(), 5000);
             }
         }
 
+        // خودکار جشن
         setTimeout(() => {
-            celebrate();
-            setInterval(() => {
-                if (Math.random() > 0.7) {
-                    createFireworks(3);
-                }
-            }, 3000);
+            playFireworks();
+            createConfetti(50);
         }, 1000);
     </script>
 </body>
 </html>
-
 <script type="text/javascript">
 	atOptions = {
 		'key' : '1c984e0d05b70b660c8f5085d495b10f',
@@ -456,7 +423,6 @@
 	};
 </script>
 <script type="text/javascript" src="//www.highperformanceformat.com/1c984e0d05b70b660c8f5085d495b10f/invoke.js"></script>
-
 <script type="text/javascript">
 	atOptions = {
 		'key' : '1c984e0d05b70b660c8f5085d495b10f',
@@ -467,7 +433,16 @@
 	};
 </script>
 <script type="text/javascript" src="//www.highperformanceformat.com/1c984e0d05b70b660c8f5085d495b10f/invoke.js"></script>
-
+<script type="text/javascript">
+	atOptions = {
+		'key' : '1c984e0d05b70b660c8f5085d495b10f',
+		'format' : 'iframe',
+		'height' : 90,
+		'width' : 728,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/1c984e0d05b70b660c8f5085d495b10f/invoke.js"></script>
 <script type="text/javascript">
 	atOptions = {
 		'key' : '1c984e0d05b70b660c8f5085d495b10f',
